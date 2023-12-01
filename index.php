@@ -7,23 +7,32 @@
 </head>
 <body>
     <form method="post">
-        <input type="text" placeholder="login" name="login">
-        <input type="password" placeholder="hasło" name="password">
-        <input type="submit" value="zaloguj" name="submit">
+        <input type="text" placeholder="Login" name="login">
+        <input type="password" placeholder="Hasło" name="password">
+        <input type="submit" value="Zaloguj się" name="submit">
     </form>
 </body>
 <?php
-if(isset($_POST['sumbit']))
+$connection = new mysqli("localhost","root","","baza");
+
+if($connection->connect_errno!=0)
+    echo "Błąd: ".$polaczenie->errno;
+
+
+else
 {
-    if($_POST['login'] == 'admin')
+    $login = "SELECT * FROM users WHERE login='$_POST[login]' AND haslo='$_POST[password]'";
+
+
+    if($query = $connection->query($login))
     {
-        if($_POST['password'] == "test")
-        echo "Zalogowano";
-        else
-        echo "Hasło jest nieprawidłowe";
+        $records = $query->num_rows;
+        if($records == 0)
+        echo "Nie ma takiego użytkownika lub hasła!";
+        else 
+        echo "Zalogowano!";
     }
-    else
-    echo "login jest nieprawidłowy";
+
 }
 ?>
 </html>
